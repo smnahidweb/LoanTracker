@@ -73,7 +73,7 @@ export default function HomePage() {
               {/* Action Buttons */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link
-                  href="/manager/dashboard"
+                  href="/login"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#C2410C] px-6 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#a6370a]"
                 >
                   ম্যানেজার প্যানেল
@@ -81,7 +81,7 @@ export default function HomePage() {
                 </Link>
 
                 <Link
-                  href="/admin/dashboard"
+                  href="login"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-6 text-sm font-semibold text-gray-700 shadow-sm transition-all hover:bg-gray-50 hover:text-gray-900"
                 >
                   অ্যাডমিন প্যানেল
