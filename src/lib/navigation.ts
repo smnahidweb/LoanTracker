@@ -30,7 +30,7 @@ export const navigation: Record<UserRole, NavigationItem[]> = {
     },
     {
       title: "ম্যানেজার",
-      href: "/admin/managers",
+      href: "/admin/dashboard/managers",
       icon: UserCog,
     },
     {
