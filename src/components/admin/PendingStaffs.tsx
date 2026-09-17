@@ -51,7 +51,7 @@ export default function PendingStaffs({
     if (branch) {
       try {
         setActionLoading(staffId);
-        await api.patch(`/api/admin/users/${staffId}/role`, {
+        await api.patch(`/api/admin/assign-manager/${staffId}/role`, {
           role: "MANAGER",
           branch: branch,
         });
