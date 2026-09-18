@@ -66,7 +66,7 @@ export default function AdminManagersPage() {
         />
 
         {/* Active Managers Component */}
-        <ActiveManagers managers={activeManagers} loading={loading} />
+        <ActiveManagers managers={activeManagers} loading={loading} onRefresh={fetchData} />
       </div>
     </AppShell>
   );
