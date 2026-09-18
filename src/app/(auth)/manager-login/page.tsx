@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { ShieldCheck, LogIn, ArrowRight, Building2, AlertCircle, UserPlus } from "lucide-react";
 import { authClient } from "@/src/lib/auth-client";
-
+import { api } from "@/src/lib/api";
 
 const managerLoginSchema = z.object({
   email: z.string().email({ message: "সঠিক ইমেইল এড্রেস লিখুন" }),
@@ -33,27 +33,31 @@ export default function ManagerLoginPage() {
     },
   });
 
-  const onSubmit = async (data: ManagerLoginFormData) => {
-    setAuthError(null);
+const onSubmit = async (data: ManagerLoginFormData) => {
+  setAuthError(null);
 
-    try {
-      // Better-Auth Client sign-in request to Port 5000
-      const { data: resData, error } = await authClient.signIn.email({
-        email: data.email,
-        password: data.password,
-      });
+  try {
+    const { data: resData } = await api.post("api/auth/login", {
+      email: data.email,
+      password: data.password,
+    });
 
-      if (error) {
-        setAuthError(error.message || "ম্যানেজার ক্রেডেনশিয়ালস সঠিক নয় বা একাউন্টটি এখনও পেন্ডিং রয়েছে।");
-        return;
-      }
+    // রেসপন্স থেকে সঠিকভাবে user বের করে নিয়ে আসা
+    const user = resData?.data?.user || resData?.user;
 
-      // Successful login redirect to Manager Dashboard
-      router.push("/manager/dashboard");
-    } catch (err) {
-      setAuthError("সার্ভারে সমস্যা দেখা দিয়েছে। পরে চেষ্টা করুন।");
+    // ইউজার না থাকলে বা রোল MANAGER না হলে ঢুকতে দেওয়া হবে না
+    if (!user || user.role !== "MANAGER") {
+      setAuthError("আপনার অ্যাকাউন্টটি এখনো ম্যানেজার হিসেবে অনুমোদিত নয়। এডমিনের অনুমোদনের জন্য অপেক্ষা করুন।");
+      return;
     }
-  };
+
+    // শুধুমাত্র রোল MANAGER হলেই ড্যাশবোর্ডে পাঠাবে
+    router.push("/manager/dashboard");
+  } catch (err: any) {
+    const errorMessage = err?.response?.data?.message || "সার্ভারে সমস্যা দেখা দিয়েছে। পরে চেষ্টা করুন।";
+    setAuthError(errorMessage);
+  }
+};
 
   return (
     <main className="relative min-h-screen w-full bg-[#FAF9F7] text-gray-900 font-sans flex flex-col justify-between overflow-hidden selection:bg-[#C2410C]/10 selection:text-[#C2410C]">
